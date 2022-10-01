@@ -9,6 +9,10 @@ steps:
   settings:
     repo: localhost:5001/example/hello-go
     insecure: true
+  environment:
+    # enable docker buildkit
+    # https://docs.docker.com/develop/develop-images/build_enhancements/#to-enable-buildkit-builds
+    DOCKER_BUILDKIT: "1"
   volumes:
     - name: docker-sock
       path: /var/run/docker.sock
