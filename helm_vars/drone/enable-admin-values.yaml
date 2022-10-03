@@ -1,0 +1,26 @@
+# Make sure to update the values
+hostAliases:
+   - ip: "${GITEA_HTTP_CLUSTER_IP}"
+     hostnames:
+     - gitea-127.0.0.1.sslip.io
+service:
+  # the Drone Kubernetes service type
+  type: NodePort
+  port: 30980
+  # drone server from our laptops
+  nodePort: 30980
+
+extraSecretNamesForEnvFrom:
+ - demo-oauth-user-01-secret
+
+env:
+  DRONE_SERVER_HOST: "${DRONE_SERVER_DOMAIN}"
+  # Since we run Gitea in http mode we will skip TLS verification
+  DRONE_GITEA_SKIP_VERIFY: true
+  # The url where Gitea could be reached, typically used while 
+  # cloning the sources
+  # https://docs.drone.io/server/provider/gitea/
+  DRONE_GITEA_SERVER: "${GITEA_URL}"
+  DRONE_SERVER_PROTO: http
+  # making user-01 as admin
+  DRONE_USER_CREATE: "username:${GITEA_USER},machine:false,admin:true,token:${DRONE_TOKEN}"
