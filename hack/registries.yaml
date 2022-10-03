@@ -1,0 +1,7 @@
+mirrors:
+  "my-registry.localhost:5001":
+    endpoint:
+      - http://host.k3d.internal:5001
+  "docker.io":
+    endpoint:
+      - http://host.k3d.internal:5001
