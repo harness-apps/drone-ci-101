@@ -1,0 +1,25 @@
+kind: pipeline
+type: docker
+name: default
+
+steps:
+
+- name: build-image
+  image: plugins/docker
+  settings:
+    repo: localhost:5001/example/hello-go
+    insecure: true
+  environment:
+    # enable docker buildkit
+    # https://docs.docker.com/develop/develop-images/build_enhancements/#to-enable-buildkit-builds
+    DOCKER_BUILDKIT: "1"
+  volumes:
+    - name: docker-sock
+      path: /var/run/docker.sock
+
+volumes:
+- name: docker-sock
+  host:
+   path: /var/run/docker.sock
+    
+     
