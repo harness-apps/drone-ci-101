@@ -1,0 +1,20 @@
+- name: build image to gcr
+  image: gcr.io/kaniko-project/executor:debug
+  commands:
+    - echo -n "$GOOGLE_APPLICATION_CREDENTIALS_JSON" > /kaniko/sa.json
+    - export DESTINATION_IMAGE="$IMAGE_REGISTRY/$IMAGE_REPO:$PLUGIN_TAG"
+    - >
+      /kaniko/executor
+      --context /drone/src
+      --dockerfile Dockerfile
+      --destination $DESTINATION_IMAGE
+      --custom-platform linux/amd64
+      --cache
+  environment:
+    GOOGLE_APPLICATION_CREDENTIALS: /kaniko/sa.json
+    GOOGLE_APPLICATION_CREDENTIALS_JSON:
+      from_secret: google_application_credentials
+    IMAGE_REGISTRY:
+      from_secret: image_registry
+    IMAGE_REPO:
+      from_secret: image_repo

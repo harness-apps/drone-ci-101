@@ -1,9 +1,11 @@
 kind: pipeline
 type: docker
 name: default
+
 platform:
   os: linux
-  arch: arm64
+  arсh: arm64
+
 steps:
 - name: unit test
   image: kameshsampath/drone-java-maven-plugin:v1.0.3
@@ -40,6 +42,3 @@ steps:
     password:
       from_secret: quayio_password
     purge: true
-  volumes:
-    - name: dockersock
-      path: /var/run/docker.sock
