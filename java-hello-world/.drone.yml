@@ -1,15 +1,12 @@
 kind: pipeline
 type: docker
 name: default
-platform:
-  os: linux
-  arch: arm64
 steps:
 - name: unit test
   image: kameshsampath/drone-java-maven-plugin:v1.0.3
   pull: if-not-exists
   settings:
-    # maven_mirror_url: http://nexus:8081/repository/maven-public/
+    #maven_mirror_url: http://nexus:8081/repository/maven-public/
     goals:
     - clean 
     - test
@@ -25,20 +22,17 @@ steps:
     - -DskipTests
     - -q
 - name: push image to registry
-  image: plugins/docker
+  image: thegeeklab/drone-docker-buildx
+  privileged: true
   pull: if-not-exists
   settings:
-    insecure: true
-    registry: localhost:5001
-    repo: localhost:5001/example/hello-world
+    repo:
+      from_secret: image_repo
+    username:
+      from_secret: image_registry_username
+    password:
+      from_secret: image_registry_password
+    platforms:
+      - linux/amd64
+      - linux/arm64
     context: .
-    tags:
-     - 1.0.0-SNAPSHOT
-     - latest
-  volumes:
-    - name: dockersock
-      path: /var/run/docker.sock
-volumes:
-  - name: dockersock
-    host:
-      path: /var/run/docker.sock
