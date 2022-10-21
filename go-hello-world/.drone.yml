@@ -7,7 +7,7 @@ steps:
 - name: build-image
   image: plugins/docker
   settings:
-    repo: localhost:5001/example/hello-go
+    repo: localhost:5001/example/go-hello-world
     insecure: true
   environment:
     # enable docker buildkit
