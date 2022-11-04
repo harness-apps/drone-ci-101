@@ -1,25 +1,28 @@
+---
 kind: pipeline
 type: docker
 name: default
 
 steps:
+  - name: test
+    image: golang:1.18
+    pull: if-not-exists
+    commands:
+      - go clean -testcache
+      - go test ./... -v
 
-- name: build-image
-  image: plugins/docker
-  settings:
-    repo: localhost:5001/example/go-hello-world
-    insecure: true
-  environment:
-    # enable docker buildkit
-    # https://docs.docker.com/develop/develop-images/build_enhancements/#to-enable-buildkit-builds
-    DOCKER_BUILDKIT: "1"
-  volumes:
-    - name: docker-sock
-      path: /var/run/docker.sock
+  - name: build
+    image: goreleaser/goreleaser
+    pull: if-not-exists
+    commands:
+      - goreleaser build --snapshot --rm-dist
 
-volumes:
-- name: docker-sock
-  host:
-   path: /var/run/docker.sock
-    
-     
+  - name: push
+    image: thegeeklab/drone-docker-buildx
+    privileged: true
+    pull: if-not-exists
+    settings:
+      platforms:
+        - linux/amd64
+        - linux/arm64
+      context: dist
