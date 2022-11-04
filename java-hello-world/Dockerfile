@@ -1,3 +1,7 @@
-FROM registry.access.redhat.com/ubi8/openjdk-11
+FROM gcr.io/distroless/java11-debian11
 
-COPY target/*.jar /deployments/
+WORKDIR /app
+
+COPY target/hello-world.jar /app
+
+CMD [ "hello-world.jar" ]
