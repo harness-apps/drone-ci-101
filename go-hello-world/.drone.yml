@@ -24,10 +24,10 @@ steps:
       context: dist
       insecure: true
       repo: localhost:5001/example/go-hello-world
-      environment:
-        # enable docker buildkit
-        # https://docs.docker.com/develop/develop-images/build_enhancements/#to-enable-buildkit-builds
-        DOCKER_BUILDKIT: "1"
+    environment:
+      # enable docker buildkit
+      # https://docs.docker.com/develop/develop-images/build_enhancements/#to-enable-buildkit-builds
+      DOCKER_BUILDKIT: "1"
     volumes:
       - name: docker-sock
         path: /var/run/docker.sock
