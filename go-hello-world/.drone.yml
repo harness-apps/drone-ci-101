@@ -10,12 +10,17 @@ steps:
     commands:
       - go clean -testcache
       - go test ./... -v
-
+    volumes:
+      - name: go-cache
+        path: /go/pkg/mod
   - name: build
     image: goreleaser/goreleaser
     pull: if-not-exists
     commands:
       - goreleaser build --snapshot --rm-dist
+    volumes:
+      - name: go-cache
+        path: /go/pkg/mod
 
   - name: push
     image: thegeeklab/drone-docker-buildx
@@ -26,3 +31,7 @@ steps:
         - linux/amd64
         - linux/arm64
       context: dist
+
+volumes:
+  - name: go-cache
+    temp: {}
